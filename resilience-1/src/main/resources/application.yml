@@ -1,0 +1,41 @@
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+      
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        
+#resilience4j.bulkhead:
+#  instances:
+#    userService:
+#       maxWaitDuration: 5ms
+#       maxConcurrentCalls: 3      
+#resilience4j.thread-pool-bulkhead:
+#  instances:
+#    userService:
+#       maxThreadPoolSize: 2 
+#       coreThreadPoolSize: 1
+#       queueCapacity: 1
+   
+server:
+   port: 8085 
+spring.jackson.serialization.fail-on-empty-beans: false
